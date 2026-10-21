@@ -13,7 +13,7 @@ window.SITE = {
   bio: "14+ years building digital banking platforms. I built ITR Update so anyone can see how ITR processing is moving, day by day.",
 
   links: {
-    linkedin: "https://www.linkedin.com/in/YOUR-PROFILE/",
+    linkedin: "https://www.linkedin.com/in/amit-chaurasiya-45340945/",
     github: "https://github.com/amitchaurasiyarorai",
     email: "",                 // e.g. "you@example.com"
     x: "",                     // e.g. "https://x.com/yourname"
