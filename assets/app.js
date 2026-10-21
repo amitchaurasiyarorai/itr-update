@@ -171,11 +171,20 @@
     const t = new Date(latest.timestamp_ist.replace(/(\d{2})(\d{2})$/, '$1:$2'));
     $('meta').textContent = 'Last updated ' + t.toLocaleString('en-IN', {
       timeZone: 'Asia/Kolkata', day: 'numeric', month: 'short', year: 'numeric', hour: 'numeric', minute: '2-digit',
-    }) + ' IST · figures as of ' + dayLabel(day(latest)) + ' · ' + days.length + ' days tracked';
+    }) + ' IST · figures as of ' + dayLabel(day(latest)) + ' · ' + days.length + (days.length === 1 ? ' day' : ' days') + ' tracked';
 
     renderCards(latest);
     renderBacklog(days);
     renderTable(rows);
+
+    // Trends need at least two portal days; until then show a note instead of near-empty charts.
+    if (days.length < 2) {
+      document.querySelectorAll('.chart').forEach((c) => {
+        c.innerHTML = '<p class="chart-note">Trends appear once a second day of data is collected.</p>';
+      });
+      document.querySelectorAll('.seg, #deltaMetric').forEach((el) => (el.hidden = true));
+      return;
+    }
 
     drawTotals(90);
     document.querySelectorAll('.seg button').forEach((b) =>
