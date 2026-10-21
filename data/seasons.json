@@ -6,7 +6,11 @@
       "fy": "2025-26",
       "filing_opened": "2026-05-15",
       "sources": [
-        { "id": "itd-may-2026", "title": "ITR filing for AY 2026-27 opens (DD News, 15 May 2026)", "url": "https://ddnews.gov.in/en/itr-filing-process-for-ay-2026-27-officially-begins/" }
+        {
+          "id": "itd-may-2026",
+          "title": "ITR filing for AY 2026-27 opens (DD News, 15 May 2026)",
+          "url": "https://ddnews.gov.in/en/itr-filing-process-for-ay-2026-27-officially-begins/"
+        }
       ]
     },
     {
@@ -14,14 +18,37 @@
       "fy": "2024-25",
       "filing_opened": "2025-05-29",
       "history": "history/ay-2025-26.csv",
-      "note": "Daily tracking started after this season, so it is reconstructed from portal snapshots (9–14 Aug 2025) and dated figures published during the season. Points marked ≈ are rounded figures as reported.",
       "sources": [
-        { "id": "itrstats-repo", "title": "Portal snapshots, 9–14 Aug 2025 (TensorBlast/ITRStats)", "url": "https://github.com/TensorBlast/ITRStats" },
-        { "id": "fe-sep-2025", "title": "Figures as of 4 Sep 2025 (Financial Express)", "url": "https://www.financialexpress.com/money/govt-extended-itr-ay-2025-26-deadline-but-only-4-56-crore-returns-filed-so-far-3967854/" },
-        { "id": "itd-sep-2025", "title": "Over 7 crore ITRs filed by 15 Sep 2025 (Income Tax Dept via DD News)", "url": "https://ddnews.gov.in/en/over-7-crore-itrs-filed-so-far-for-ay-2025-26-income-tax-department/" },
-        { "id": "taxtmi-dec-2025", "title": "Portal figures as of 13 Dec 2025 (TaxTMI)", "url": "https://www.taxtmi.com/article/detailed?id=15621" },
-        { "id": "angelone-jan-2026", "title": "Figures reported 7 Jan 2026 (Angel One)", "url": "https://www.angelone.in/news/taxation/over-63-lakh-itrs-pending-in-ay-2025-26-why-refunds-are-delayed" },
-        { "id": "fe-may-2025", "title": "AY 2025-26 filing opened 29 May 2025 (Financial Express via A2Z Taxcorp)", "url": "https://a2ztaxcorp.net/govt-extended-itr-filing-ay-2025-26-deadline-but-less-than-40-returns-processed-yet/" }
+        {
+          "id": "itrstats-repo",
+          "title": "Portal snapshots, 9–14 Aug 2025 (TensorBlast/ITRStats)",
+          "url": "https://github.com/TensorBlast/ITRStats"
+        },
+        {
+          "id": "fe-sep-2025",
+          "title": "Figures as of 4 Sep 2025 (Financial Express)",
+          "url": "https://www.financialexpress.com/money/govt-extended-itr-ay-2025-26-deadline-but-only-4-56-crore-returns-filed-so-far-3967854/"
+        },
+        {
+          "id": "itd-sep-2025",
+          "title": "Over 7 crore ITRs filed by 15 Sep 2025 (Income Tax Dept via DD News)",
+          "url": "https://ddnews.gov.in/en/over-7-crore-itrs-filed-so-far-for-ay-2025-26-income-tax-department/"
+        },
+        {
+          "id": "taxtmi-dec-2025",
+          "title": "Portal figures as of 13 Dec 2025 (TaxTMI)",
+          "url": "https://www.taxtmi.com/article/detailed?id=15621"
+        },
+        {
+          "id": "angelone-jan-2026",
+          "title": "Figures reported 7 Jan 2026 (Angel One)",
+          "url": "https://www.angelone.in/news/taxation/over-63-lakh-itrs-pending-in-ay-2025-26-why-refunds-are-delayed"
+        },
+        {
+          "id": "fe-may-2025",
+          "title": "AY 2025-26 filing opened 29 May 2025 (Financial Express via A2Z Taxcorp)",
+          "url": "https://a2ztaxcorp.net/govt-extended-itr-filing-ay-2025-26-deadline-but-less-than-40-returns-processed-yet/"
+        }
       ]
     }
   ]
