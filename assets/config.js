@@ -2,7 +2,7 @@
 // Leave a field as "" to hide it.
 window.SITE = {
   siteName: "ITR Update",
-  siteUrl: "https://amitorai.github.io/itr-update/",   // change if you add a custom domain
+  siteUrl: "https://amitchaurasiyarorai.github.io/itr-update/",   // change if you add a custom domain
 
   name: "Amit Chaurasiya",
   role: "Technical Architect",
@@ -18,11 +18,11 @@ window.SITE = {
 
   links: {
     linkedin: "https://www.linkedin.com/in/YOUR-PROFILE/",
-    github: "https://github.com/amitorai",
+    github: "https://github.com/amitchaurasiyarorai",
     email: "",                 // e.g. "you@example.com"
     x: "",                     // e.g. "https://x.com/yourname"
     website: "",
   },
 
-  repo: "https://github.com/amitorai/itr-update",   // public GitHub repo, shown as "Source & data"
+  repo: "https://github.com/amitchaurasiyarorai/itr-update",   // public GitHub repo, shown as "Source & data"
 };
