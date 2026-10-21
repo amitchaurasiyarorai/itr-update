@@ -124,3 +124,5 @@ a.brand { color: inherit; text-decoration: none; }
   .defs { grid-template-columns: 1fr; gap: 2px; }
   .defs dd { margin-bottom: 8px; }
 }
+.disclaimer { padding: 0 2px; }
+.disclaimer a { color: var(--accent); }

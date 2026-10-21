@@ -6,15 +6,11 @@ window.SITE = {
 
   name: "Amit Chaurasiya",
   role: "Technical Architect",
-  company: "i-exceed Technology Solutions",
+  company: "",
   location: "",                // e.g. "Bengaluru, India"
   photo: "",                   // e.g. "assets/amit.jpg" — initials are shown if empty
 
-  bio:
-    "I'm a Technical Architect with 14+ years in BFSI digital banking, building Java/Spring Boot " +
-    "microservices on OpenShift and integrating core banking systems. I built ITR Update in my own " +
-    "time because the e-Filing portal publishes useful numbers but no history — and taxpayers waiting " +
-    "on refunds deserve to see the trend, not just today's total.",
+  bio: "14+ years building digital banking platforms. I built ITR Update so anyone can see how ITR processing is moving, day by day.",
 
   links: {
     linkedin: "https://www.linkedin.com/in/YOUR-PROFILE/",
