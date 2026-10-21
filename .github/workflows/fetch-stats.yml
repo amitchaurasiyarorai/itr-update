@@ -1,0 +1,41 @@
+name: Fetch ITR stats
+
+on:
+  schedule:
+    # GitHub cron is UTC. 8:00 AM IST = 02:30 UTC, 6:00 PM IST = 12:30 UTC.
+    # Offset a few minutes off :30 because top/half-hour runs are often delayed.
+    - cron: "23 2 * * *"
+    - cron: "23 12 * * *"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: fetch-stats
+  cancel-in-progress: false
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Fetch and append
+        run: python scripts/fetch_stats.py
+
+      - name: Commit data
+        run: |
+          git config user.name "itr-update-bot"
+          git config user.email "itr-update-bot@users.noreply.github.com"
+          git add data/
+          if git diff --cached --quiet; then
+            echo "No changes"
+          else
+            git commit -m "data: $(TZ=Asia/Kolkata date '+%Y-%m-%d %H:%M IST')"
+            git push
+          fi

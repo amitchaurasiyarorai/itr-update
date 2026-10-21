@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>About — ITR Update</title>
+  <meta name="description" content="Why ITR Update exists, how the data is collected, and who built it.">
+  <meta property="og:title" content="About ITR Update">
+  <meta property="og:description" content="Daily, open tracking of Income Tax e-Filing statistics — and who built it.">
+  <meta property="og:type" content="website">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body data-page="about">
+  <header class="top">
+    <div class="wrap">
+      <a class="brand" href="index.html">
+        <span class="logo" aria-hidden="true">₹</span>
+        <div>
+          <h1>ITR Update</h1>
+          <p class="sub">Income Tax e-Filing portal statistics, tracked every day</p>
+        </div>
+      </a>
+      <nav class="nav" id="nav" aria-label="Main"></nav>
+    </div>
+  </header>
+
+  <main class="wrap about">
+    <section class="panel person" id="person"></section>
+
+    <section class="panel prose">
+      <h2>Why this exists</h2>
+      <p>Every year, crores of Indians file their Income Tax Returns and then wait — sometimes for months — to hear about their refunds. The e-Filing portal publishes headline statistics, but only today's totals. There's no history, so you can't see how fast returns are being processed, whether the backlog is shrinking, or roughly when it might clear.</p>
+      <p>ITR Update records those numbers every day and shows how they change. Public data should be publicly accessible: presented clearly, updated regularly, and free for everyone.</p>
+    </section>
+
+    <section class="panel prose">
+      <h2>How it works</h2>
+      <ol class="steps">
+        <li><b>Fetched automatically.</b> A small Python script runs twice a day (around 8 AM and 6 PM IST) and reads the public statistics from the Income Tax e-Filing portal.</li>
+        <li><b>Stored as open data.</b> Each reading is appended to a CSV file in a public repository — versioned, auditable and free to download.</li>
+        <li><b>Visualised on this site.</b> The dashboard reads that CSV directly and draws the charts in your browser. No backend, no database, no tracking.</li>
+      </ol>
+    </section>
+
+    <section class="panel prose">
+      <h2>What's tracked</h2>
+      <dl class="defs">
+        <dt>Registered individual users</dt><dd>Individual taxpayers registered on the e-Filing portal.</dd>
+        <dt>Returns filed</dt><dd>ITRs filed for the current assessment year (Aadhaar-linked PAN).</dd>
+        <dt>E-verified returns</dt><dd>Filed returns that have been e-verified and entered the processing queue.</dd>
+        <dt>Processed returns</dt><dd>Returns the Income Tax Department has finished processing.</dd>
+        <dt>Backlog</dt><dd>E-verified minus processed — returns still waiting in the queue.</dd>
+      </dl>
+      <p class="hint">The portal refreshes these figures roughly once a day, and counts restart with each new assessment year.</p>
+    </section>
+
+    <section class="panel prose">
+      <h2>Disclaimer</h2>
+      <p>This is an independent, non-commercial project. It is not affiliated with or endorsed by the Income Tax Department or the Government of India. Figures are reproduced as published by the e-Filing portal; for anything official, refer to <a href="https://www.incometax.gov.in" target="_blank" rel="noopener">incometax.gov.in</a>.</p>
+    </section>
+  </main>
+
+  <footer class="wrap foot narrow" id="credit"></footer>
+
+  <script src="assets/config.js"></script>
+  <script src="assets/site.js"></script>
+  <script>
+    (() => {
+      const S = window.SITE || {};
+      const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+      const initials = (S.name || '?').split(/\s+/).map((w) => w[0]).slice(0, 2).join('').toUpperCase();
+      const avatar = S.photo
+        ? `<img class="avatar" src="${esc(S.photo)}" alt="${esc(S.name)}">`
+        : `<div class="avatar" aria-hidden="true">${esc(initials)}</div>`;
+      const roleLine = [S.role, S.company].filter(Boolean).map(esc).join(' · ');
+      document.getElementById('person').innerHTML = `
+        ${avatar}
+        <div class="person-body">
+          <p class="eyebrow">Built by</p>
+          <h2>${esc(S.name || '')}</h2>
+          ${roleLine ? `<p class="role">${roleLine}</p>` : ''}
+          ${S.location ? `<p class="hint">${esc(S.location)}</p>` : ''}
+          ${S.bio ? `<p class="bio">${esc(S.bio)}</p>` : ''}
+          <div class="socials">${window.siteLinks('chip')}${S.repo ? `<a class="chip" href="${esc(S.repo)}" target="_blank" rel="noopener"><span>Source &amp; data</span></a>` : ''}</div>
+        </div>`;
+    })();
+  </script>
+</body>
+</html>

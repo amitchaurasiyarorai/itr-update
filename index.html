@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ITR Update — daily e-Filing stats</title>
+  <meta name="description" content="Daily tracker of Income Tax e-Filing portal statistics: registered users, returns filed, e-verified returns and processed refunds, with day-on-day changes.">
+  <meta property="og:title" content="ITR Update — daily e-Filing stats">
+  <meta property="og:description" content="Track ITR filings, e-verification and processing day by day.">
+  <meta property="og:type" content="website">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body data-page="dashboard">
+  <header class="top">
+    <div class="wrap">
+      <a class="brand" href="index.html">
+        <span class="logo" aria-hidden="true">₹</span>
+        <div>
+          <h1>ITR Update</h1>
+          <p class="sub">Income Tax e-Filing portal statistics, tracked every day</p>
+        </div>
+      </a>
+      <nav class="nav" id="nav" aria-label="Main"></nav>
+    </div>
+    <div class="wrap meta-row">
+      <div class="meta" id="meta">Loading data…</div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="cards" id="cards" aria-label="Latest figures"></section>
+
+    <section class="panel backlog" id="backlog" hidden>
+      <div>
+        <h2>Processing backlog</h2>
+        <p class="hint">E-verified returns still waiting to be processed</p>
+      </div>
+      <div class="backlog-figs">
+        <div><span class="big" id="backlogNow">—</span><span class="lbl">pending now</span></div>
+        <div><span class="big" id="backlogDelta">—</span><span class="lbl">change since previous day</span></div>
+        <div><span class="big" id="processedPct">—</span><span class="lbl">of e-verified returns processed</span></div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <h2>Cumulative totals</h2>
+        <div class="seg" role="group" aria-label="Range">
+          <button data-range="30">30d</button>
+          <button data-range="90" class="on">90d</button>
+          <button data-range="0">All</button>
+        </div>
+      </div>
+      <div class="chart"><canvas id="totalsChart" aria-label="Cumulative totals over time"></canvas></div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <h2>Daily change</h2>
+        <select id="deltaMetric" aria-label="Metric for daily change"></select>
+      </div>
+      <div class="chart"><canvas id="deltaChart" aria-label="Day-on-day change"></canvas></div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <h2>Recent readings</h2>
+        <a class="btn" href="data/stats.csv" download>Download CSV</a>
+      </div>
+      <div class="table-wrap"><table id="table"></table></div>
+    </section>
+
+    <div class="empty panel" id="empty" hidden>
+      <h2>No data yet</h2>
+      <p>The first scheduled fetch hasn't run. Trigger <b>Actions → Fetch ITR stats → Run workflow</b> on GitHub, or run <code>python scripts/fetch_stats.py</code> locally.</p>
+    </div>
+  </main>
+
+  <footer class="wrap foot">
+    <p>Source: Income Tax Department e-Filing portal public statistics. Fetched at 8 AM and 6 PM IST. Independent project, not affiliated with the Income Tax Department.</p>
+    <p id="credit"></p>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+  <script src="assets/config.js"></script>
+  <script src="assets/site.js"></script>
+  <script src="assets/app.js"></script>
+</body>
+</html>
