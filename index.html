@@ -28,9 +28,14 @@
     <div class="wrap meta-row">
       <div class="meta" id="meta">Loading data…</div>
     </div>
+    <div class="wrap season-wrap">
+      <nav class="season-bar" id="seasonBar" aria-label="Assessment year"></nav>
+    </div>
   </header>
 
   <main class="wrap">
+    <aside class="panel season-note" id="seasonNote" hidden></aside>
+
     <section class="cards" id="cards" aria-label="Latest figures"></section>
 
     <section class="panel backlog" id="backlog" hidden>
@@ -39,16 +44,27 @@
         <p class="hint">E-verified returns still waiting to be processed</p>
       </div>
       <div class="backlog-figs">
-        <div><span class="big" id="backlogNow">—</span><span class="lbl">pending now</span></div>
+        <div><span class="big" id="backlogNow">—</span><span class="lbl" id="backlogNowLbl">pending now</span></div>
         <div><span class="big" id="backlogDelta">—</span><span class="lbl">change since previous day</span></div>
         <div><span class="big" id="processedPct">—</span><span class="lbl">of e-verified returns processed</span></div>
       </div>
     </section>
 
+    <section class="panel" id="compare" hidden>
+      <div class="panel-head">
+        <div>
+          <h2>Compared with last season</h2>
+          <p class="hint" id="compareHint"></p>
+        </div>
+      </div>
+      <div class="cmp-grid" id="compareCards"></div>
+      <div class="chart"><canvas id="compareChart" aria-label="This season against last season by days since filing opened"></canvas></div>
+    </section>
+
     <section class="panel">
       <div class="panel-head">
         <h2>Cumulative totals</h2>
-        <div class="seg" role="group" aria-label="Range">
+        <div class="seg" id="rangeSeg" role="group" aria-label="Range">
           <button data-range="30">30d</button>
           <button data-range="90" class="on">90d</button>
           <button data-range="0">All</button>
@@ -67,8 +83,8 @@
 
     <section class="panel">
       <div class="panel-head">
-        <h2>Recent readings</h2>
-        <a class="btn" href="data/stats.csv" download>Download CSV</a>
+        <h2 id="tableTitle">Recent readings</h2>
+        <a class="btn" id="downloadCsv" href="data/stats.csv" download>Download CSV</a>
       </div>
       <div class="table-wrap"><table id="table"></table></div>
     </section>

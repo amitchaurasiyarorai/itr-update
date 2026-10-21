@@ -14,6 +14,9 @@ The endpoint is a plain GET returning flat JSON, e.g.
 The portal refreshes once a day; LastUpdated is the date the figures are "as of".
 Deltas are therefore computed against the last row with an earlier as_of date,
 so the 8 AM and 6 PM fetches of the same portal day carry the same delta.
+
+Each row is tagged with its assessment year (`ay`, e.g. "2026-27"). A new AY is
+detected automatically when the portal's counters reset; set AY_OVERRIDE to force one.
 If the portal ever renames fields, the keyword fallback in FIELD_HINTS kicks in;
 use --inspect to see what was matched.
 """
@@ -59,7 +62,7 @@ FIELD_HINTS = {
     "returns_filed": (r"filed|itr|return", r"today|daily|verif|process"),
 }
 
-HEADER = ["timestamp_ist", "date_ist", "as_of"] + METRICS + [f"{m}_delta" for m in METRICS]
+HEADER = ["timestamp_ist", "date_ist", "as_of", "ay"] + METRICS + [f"{m}_delta" for m in METRICS]
 
 
 def fetch(attempts: int = 4) -> object:
@@ -160,11 +163,62 @@ def parse_as_of(payload):
     return m.group(0) if m else None
 
 
+# ---- Assessment year (season) handling --------------------------------------
+# Filing for a new AY opens on a different date each year (29 May 2025, 15 May 2026),
+# and until then the portal keeps showing the previous AY's totals. So a new season
+# is detected from the counters resetting, not from the calendar.
+RESET_RATIO = 0.5  # returns_filed falling below half the previous reading = new AY
+
+
+def ay_label(start_year: int) -> str:
+    return f"{start_year}-{(start_year + 1) % 100:02d}"
+
+
+def ay_start(label: str) -> int:
+    return int(label[:4])
+
+
+def ay_from_date(as_of: str) -> str:
+    """Best guess with no history: seasons open around May/June."""
+    y, m = int(as_of[:4]), int(as_of[5:7])
+    return ay_label(y if m >= 6 else y - 1)
+
+
+def infer_ay(as_of: str, returns_filed, prev_row) -> str:
+    override = os.environ.get("AY_OVERRIDE", "").strip()
+    if override:
+        return override
+    if not prev_row or not prev_row.get("ay"):
+        return ay_from_date(as_of)
+    prev_filed = to_number(prev_row.get("returns_filed"))
+    if returns_filed is not None and prev_filed and returns_filed < prev_filed * RESET_RATIO:
+        return ay_label(ay_start(prev_row["ay"]) + 1)
+    return prev_row["ay"]
+
+
 def read_rows():
-    if not CSV_PATH.exists():
+    """Read stats.csv, upgrading older files to the current HEADER (fills in `ay`)."""
+    if not CSV_PATH.exists() or CSV_PATH.stat().st_size == 0:
         return []
     with CSV_PATH.open(newline="") as f:
-        return list(csv.DictReader(f))
+        reader = csv.DictReader(f)
+        rows, fields = list(reader), reader.fieldnames or []
+    if fields != HEADER:
+        prev = None
+        for r in rows:
+            if not r.get("ay"):
+                r["ay"] = infer_ay(r.get("as_of") or r["date_ist"], to_number(r.get("returns_filed")), prev)
+            prev = r
+        write_rows(rows)
+    return rows
+
+
+def write_rows(rows):
+    CSV_PATH.parent.mkdir(parents=True, exist_ok=True)
+    with CSV_PATH.open("w", newline="") as f:
+        w = csv.DictWriter(f, fieldnames=HEADER, extrasaction="ignore")
+        w.writeheader()
+        w.writerows(rows)
 
 
 def main():
@@ -191,23 +245,22 @@ def main():
     rows = read_rows()
     as_of = parse_as_of(payload) or today
 
-    # Daily delta = this value minus the last reading of an earlier portal day.
+    ay = infer_ay(as_of, picked.get("returns_filed"), rows[-1] if rows else None)
+    if rows and ay != rows[-1].get("ay"):
+        print(f"new assessment year detected: {rows[-1].get('ay')} -> {ay}")
+
+    # Daily delta = this value minus the last reading of an earlier portal day
+    # in the same assessment year (no deltas across a season change).
     day = lambda r: r.get("as_of") or r["date_ist"]
-    prev = next((r for r in reversed(rows) if day(r) < as_of), None)
-    row = {"timestamp_ist": now.strftime("%Y-%m-%dT%H:%M:%S%z"), "date_ist": today, "as_of": as_of}
+    prev = next((r for r in reversed(rows) if day(r) < as_of and r.get("ay") == ay), None)
+    row = {"timestamp_ist": now.strftime("%Y-%m-%dT%H:%M:%S%z"), "date_ist": today, "as_of": as_of, "ay": ay}
     for m in METRICS:
         v = picked.get(m)
         row[m] = "" if v is None else v
         pv = to_number(prev.get(m)) if prev else None
         row[f"{m}_delta"] = "" if v is None or pv is None else v - pv
 
-    CSV_PATH.parent.mkdir(parents=True, exist_ok=True)
-    new_file = not CSV_PATH.exists() or CSV_PATH.stat().st_size == 0
-    with CSV_PATH.open("a", newline="") as f:
-        w = csv.DictWriter(f, fieldnames=HEADER)
-        if new_file:
-            w.writeheader()
-        w.writerow(row)
+    write_rows(rows + [row])
 
     # Keep the raw response too, so a mapping fix can be back-filled later.
     RAW_DIR.mkdir(parents=True, exist_ok=True)

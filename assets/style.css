@@ -80,7 +80,7 @@ td small { display: block; font-size: 11px; }
 
 @media (max-width: 860px) { .cards { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 480px) {
-  .card .num { font-size: 21px; }
+  .card .num { font-size: 18px; }
   .chart { height: 240px; }
   .backlog-figs { gap: 18px; }
 }
@@ -130,3 +130,32 @@ a.brand { color: inherit; text-decoration: none; }
   border: 1px dashed var(--line); border-radius: 10px; padding: 16px; }
 .seg[hidden], select[hidden] { display: none; }
 .chart:has(.chart-note) { height: 120px; }
+
+/* ---- seasons ---- */
+.season-bar { display: flex; gap: 8px; align-items: center; padding-bottom: 14px; overflow-x: auto; scrollbar-width: none; }
+.season-bar::-webkit-scrollbar { display: none; }
+.season-lbl { font-size: 12px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin-right: 4px; }
+.season { flex: none; display: flex; flex-direction: column; text-decoration: none; color: var(--ink); font-size: 14px; font-weight: 600;
+  border: 1px solid var(--line); border-radius: 10px; padding: 6px 12px; line-height: 1.25; background: var(--panel); }
+.season small { font-size: 11px; font-weight: 500; color: var(--muted); }
+.season:hover { border-color: var(--muted); }
+.season.on { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+.season.on small { color: var(--accent); }
+.season-note { font-size: 14px; border-left: 3px solid var(--c2); }
+.season-note p { margin: 0; }
+.season-note details { margin-top: 8px; }
+.season-note summary { cursor: pointer; color: var(--accent); font-size: 13px; font-weight: 500; }
+.season-note ul { margin: 8px 0 0; padding-left: 18px; font-size: 13px; display: grid; gap: 4px; }
+.season-note a { color: var(--accent); }
+
+.cmp-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 16px; }
+.cmp { border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; min-width: 0; }
+.cmp .lbl { font-size: 13px; color: var(--muted); }
+.cmp-row { display: flex; align-items: baseline; gap: 10px; margin: 4px 0 2px; flex-wrap: wrap; }
+.cmp-pct { font-size: 14px; font-weight: 600; }
+.cmp .hint { font-size: 12px; }
+.chart[data-note] { height: 120px; }
+.chart canvas[hidden] { display: none; }
+@media (max-width: 760px) { .cmp-grid { grid-template-columns: 1fr; } }
+.top .wrap.season-wrap { padding-block: 0; }
+.cmp-grid > p { grid-column: 1 / -1; margin: 0; }
