@@ -2,10 +2,10 @@ name: Fetch ITR stats
 
 on:
   schedule:
-    # GitHub cron is UTC. 8:00 AM IST = 02:30 UTC, 6:00 PM IST = 12:30 UTC.
-    # Offset a few minutes off :30 because top/half-hour runs are often delayed.
-    - cron: "23 2 * * *"
-    - cron: "23 12 * * *"
+    # Every two hours (GitHub cron is UTC; :23 avoids the busy top of the hour).
+    # Scheduled runs are best-effort, so frequent checks mean a skipped run costs
+    # nothing; the script only saves when the portal's figures have changed.
+    - cron: "23 */2 * * *"
   workflow_dispatch: {}
 
 permissions:

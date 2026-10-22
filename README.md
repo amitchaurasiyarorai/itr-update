@@ -8,15 +8,15 @@ The e-Filing portal publishes only today's totals. This project keeps the histor
 
 ## How it works
 
-The portal's public statistics are fetched twice a day (8 AM and 6 PM IST) by a GitHub Action, saved to [`data/stats.csv`](data/stats.csv), and charted on the site. No backend, no tracking.
+The portal's public statistics are checked every two hours by a GitHub Action; each new update is saved to [`data/stats.csv`](data/stats.csv), and charted on the site. No backend, no tracking.
 
 ## The data
 
-[`data/stats.csv`](data/stats.csv) is free to download and use. One row per fetch:
+[`data/stats.csv`](data/stats.csv) is free to download and use. One row per portal update:
 
 | Column | Meaning |
 |---|---|
-| `timestamp_ist` | When the reading was taken (IST) |
+| `timestamp_ist` | When the update was recorded (IST) |
 | `as_of` | Date the portal's figures refer to |
 | `ay` | Assessment year, e.g. `2026-27` (FY 2025-26) |
 | `registered_users` | Individuals registered on the e-Filing portal |
@@ -25,7 +25,7 @@ The portal's public statistics are fetched twice a day (8 AM and 6 PM IST) by a 
 | `processed_refunds` | Returns processed by the department |
 | `*_delta` | Change from the previous portal day, within the same assessment year |
 
-The portal refreshes about once a day, so the morning and evening readings are often identical. Raw responses are kept in `data/raw/`.
+The portal refreshes about once a day; a row is added only when its figures change. Raw responses are kept in `data/raw/`.
 
 ### Assessment years
 

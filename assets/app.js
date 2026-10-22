@@ -135,9 +135,9 @@
     if (isLatest && liveRows.length) {
       const last = liveRows.at(-1);
       const t = new Date(last.timestamp_ist.replace(/(\d{2})(\d{2})$/, '$1:$2'));
-      txt = 'Last updated ' + t.toLocaleString('en-IN', {
-        timeZone: 'Asia/Kolkata', day: 'numeric', month: 'short', year: 'numeric', hour: 'numeric', minute: '2-digit',
-      }) + ' IST · figures as of ' + dayLabel(day(latest));
+      txt = 'Figures as of ' + dayLabel(day(latest), true) + ' · recorded ' + t.toLocaleString('en-IN', {
+        timeZone: 'Asia/Kolkata', day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit',
+      }) + ' IST';
     } else {
       txt = `AY ${s.ay} · last reading ${dayLabel(day(latest), true)}`;
     }
@@ -345,8 +345,8 @@
 
   function renderTable(s) {
     const recent = (s.live ? s.rows.filter((r) => !r.history) : s.days).slice(-14).reverse();
-    const head = s.live ? 'Fetched (IST)' : 'As of';
-    $('tableTitle').textContent = s.live ? 'Recent readings' : 'Readings';
+    const head = s.live ? 'Recorded (IST)' : 'As of';
+    $('tableTitle').textContent = s.live ? 'Recent updates' : 'Readings';
     const dl = $('downloadCsv');
     dl.href = s.live ? 'data/stats.csv' : 'data/' + s.meta.history;
     $('table').innerHTML =

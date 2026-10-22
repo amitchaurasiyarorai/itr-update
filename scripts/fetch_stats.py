@@ -13,7 +13,7 @@ The endpoint is a plain GET returning flat JSON, e.g.
 
 The portal refreshes once a day; LastUpdated is the date the figures are "as of".
 Deltas are therefore computed against the last row with an earlier as_of date,
-so the 8 AM and 6 PM fetches of the same portal day carry the same delta.
+and a reading is saved only when the figures change (the job checks every two hours).
 
 Each row is tagged with its assessment year (`ay`, e.g. "2026-27"). A new AY is
 detected automatically when the portal's counters reset; set AY_OVERRIDE to force one.
@@ -196,6 +196,13 @@ def infer_ay(as_of: str, returns_filed, prev_row) -> str:
     return prev_row["ay"]
 
 
+def same_reading(a, b) -> bool:
+    """True when two rows carry the same portal date and the same figures."""
+    if (a.get("as_of") or a.get("date_ist")) != b.get("as_of"):
+        return False
+    return all(to_number(a.get(m)) == to_number(b.get(m)) for m in METRICS)
+
+
 def read_rows():
     """Read stats.csv, upgrading older files to the current HEADER (fills in `ay`)."""
     if not CSV_PATH.exists() or CSV_PATH.stat().st_size == 0:
@@ -259,6 +266,13 @@ def main():
         row[m] = "" if v is None else v
         pv = to_number(prev.get(m)) if prev else None
         row[f"{m}_delta"] = "" if v is None or pv is None else v - pv
+
+    # Save only when the portal has published something new; repeated checks of
+    # the same figures leave the files (and the repo) untouched.
+    last = rows[-1] if rows else None
+    if last and same_reading(last, row):
+        print(f"no change since {last['timestamp_ist']} (figures as of {as_of}); nothing saved")
+        return
 
     write_rows(rows + [row])
 
